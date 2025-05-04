@@ -7,6 +7,7 @@ import java.util.Date;
 
 @Component
 public class JwtUtil {
+
     private final String secret = "minhaChaveSecreta";
     private final long expirationMs = 3600000;
 

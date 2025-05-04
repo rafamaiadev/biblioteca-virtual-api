@@ -1,6 +1,8 @@
 package br.com.raphael.biblioteca_virtual_api.controller;
 
 import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import br.com.raphael.biblioteca_virtual_api.domain.model.PerfilAcesso;
@@ -10,11 +12,8 @@ import br.com.raphael.biblioteca_virtual_api.service.PerfilAcessoService;
 @RequestMapping("/perfis")
 public class PerfilAcessoController {
 
-    private final PerfilAcessoService perfilService;
-
-    public PerfilAcessoController(PerfilAcessoService perfilService) {
-        this.perfilService = perfilService;
-    }
+    @Autowired
+    private PerfilAcessoService perfilService;
 
     @GetMapping
     public List<PerfilAcesso> listarTodos() {

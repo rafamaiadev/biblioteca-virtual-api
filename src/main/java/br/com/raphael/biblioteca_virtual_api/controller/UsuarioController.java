@@ -1,6 +1,8 @@
 package br.com.raphael.biblioteca_virtual_api.controller;
 
 import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import br.com.raphael.biblioteca_virtual_api.domain.model.Usuario;
@@ -10,11 +12,8 @@ import br.com.raphael.biblioteca_virtual_api.service.UsuarioService;
 @RequestMapping("/usuarios")
 public class UsuarioController {
 
-    private final UsuarioService usuarioService;
-
-    public UsuarioController(UsuarioService usuarioService) {
-        this.usuarioService = usuarioService;
-    }
+    @Autowired
+    private UsuarioService usuarioService;
 
     @GetMapping
     public List<Usuario> listarTodos() {

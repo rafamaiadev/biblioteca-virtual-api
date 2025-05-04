@@ -4,6 +4,7 @@ import br.com.raphael.biblioteca_virtual_api.domain.dto.request.AuthRequest;
 import br.com.raphael.biblioteca_virtual_api.domain.dto.response.AuthResponse;
 import br.com.raphael.biblioteca_virtual_api.security.JwtUtil;
 import br.com.raphael.biblioteca_virtual_api.service.UsuarioService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -18,15 +19,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/auth")
 public class AuthController {
 
-    private final AuthenticationManager authenticationManager;
-    private final JwtUtil jwtUtil;
-    private final UsuarioService usuarioService;
+    @Autowired
+    private AuthenticationManager authenticationManager;
 
-    public AuthController(AuthenticationManager authenticationManager, JwtUtil jwtUtil, UsuarioService usuarioService) {
-        this.authenticationManager = authenticationManager;
-        this.jwtUtil = jwtUtil;
-        this.usuarioService = usuarioService;
-    }
+    @Autowired
+    private JwtUtil jwtUtil;
+
+    @Autowired
+    private UsuarioService usuarioService;
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody AuthRequest request) {

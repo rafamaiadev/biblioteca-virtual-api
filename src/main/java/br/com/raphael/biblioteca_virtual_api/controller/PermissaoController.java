@@ -1,6 +1,8 @@
 package br.com.raphael.biblioteca_virtual_api.controller;
 
 import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import br.com.raphael.biblioteca_virtual_api.domain.model.Permissao;
 import br.com.raphael.biblioteca_virtual_api.service.PermissaoService;
@@ -9,11 +11,8 @@ import br.com.raphael.biblioteca_virtual_api.service.PermissaoService;
 @RequestMapping("/permissoes")
 public class PermissaoController {
 
-    private final PermissaoService permissaoService;
-
-    public PermissaoController(PermissaoService permissaoService) {
-        this.permissaoService = permissaoService;
-    }
+    @Autowired
+    private PermissaoService permissaoService;
 
     @GetMapping
     public List<Permissao> listarTodos() {
