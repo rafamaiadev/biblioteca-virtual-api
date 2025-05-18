@@ -19,10 +19,10 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Getter @Setter
@@ -53,7 +53,18 @@ public class Usuario implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Arrays.asList(new SimpleGrantedAuthority(perfilAcesso.getDescricao()));
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        
+        authorities.add(new SimpleGrantedAuthority(perfilAcesso.getDescricao()));
+        
+        if (perfilAcesso.getPermissoes() != null) {
+            authorities.addAll(
+                perfilAcesso.getPermissoes().stream()
+                    .map(permissao -> new SimpleGrantedAuthority(permissao.getDescricao()))
+                    .collect(Collectors.toList())
+            );
+        }
+        return authorities;
     }
 
     @Override public String getPassword() { return password; }

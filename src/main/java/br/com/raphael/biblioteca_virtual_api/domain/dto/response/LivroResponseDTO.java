@@ -4,6 +4,5 @@ public record LivroResponseDTO(
     Long id,
     String titulo,
     String autor,
-    String categoria,
-    Boolean ativo
+    String categoria
 ) {}

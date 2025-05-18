@@ -1,0 +1,17 @@
+INSERT INTO permissao (descricao, perfil_acesso_id) VALUES
+    ('CADASTRAR_LIVRO', 1),
+    ('EDITAR_LIVRO', 1),
+    ('EXCLUIR_LIVRO', 1),
+    ('VISUALIZAR_LIVRO', 1),
+    ('CADASTRAR_USUARIO', 1),
+    ('EDITAR_USUARIO', 1),
+    ('EXCLUIR_USUARIO', 1),
+    ('VISUALIZAR_USUARIO', 1),
+    ('CADASTRAR_PERFIL', 1),
+    ('EDITAR_PERFIL', 1),
+    ('EXCLUIR_PERFIL', 1),
+    ('VISUALIZAR_PERFIL', 1);
+
+INSERT INTO permissao (descricao, perfil_acesso_id) VALUES
+    ('VISUALIZAR_LIVRO', 2),
+    ('VISUALIZAR_PROPRIO_USUARIO', 2); 

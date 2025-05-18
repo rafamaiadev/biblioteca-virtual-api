@@ -36,6 +36,6 @@ public class PerfilAcesso {
     @Column(nullable = false)
     private Boolean enabled = false;
 
-    @OneToMany(mappedBy = "perfilAcesso", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "perfilAcesso", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<Permissao> permissoes = new ArrayList<>();
 }

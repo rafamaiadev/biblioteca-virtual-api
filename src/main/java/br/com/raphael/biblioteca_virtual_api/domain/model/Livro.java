@@ -36,10 +36,6 @@ public class Livro {
     @Size(max = 255)
     private String categoria;
 
-    @Lob
     @Column(nullable = false)
     private byte[] arquivoPdf;
-
-    @Column(nullable = false)
-    private Boolean ativo = true;
 }
