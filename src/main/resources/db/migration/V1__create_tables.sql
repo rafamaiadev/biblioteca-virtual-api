@@ -25,5 +25,5 @@ CREATE TABLE livro (
     titulo VARCHAR(150) NOT NULL,
     autor VARCHAR(100) NOT NULL,
     categoria VARCHAR(255),
-    arquivo_pdf BYTEA NOT NULL
+    caminho_arquivo VARCHAR(255) NOT NULL
 ); 

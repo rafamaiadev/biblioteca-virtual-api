@@ -24,13 +24,15 @@ public class LivroService {
     
     private final LivroRepository livroRepository;
     private final LivroMapper livroMapper;
+    private final ArquivoStorageService arquivoStorageService;
 
-    @Value("${app.upload.max-file-size:10485760}") // 10MB default
+    @Value("${app.upload.max-file-size:10485760}")
     private long maxFileSize;
 
-    public LivroService(LivroRepository livroRepository, LivroMapper livroMapper) {
+    public LivroService(LivroRepository livroRepository, LivroMapper livroMapper, ArquivoStorageService arquivoStorageService) {
         this.livroRepository = livroRepository;
         this.livroMapper = livroMapper;
+        this.arquivoStorageService = arquivoStorageService;
     }
 
     @Transactional(readOnly = true)
@@ -51,6 +53,7 @@ public class LivroService {
     @Transactional
     public void delete(Long id) {
         Livro livro = findById(id);
+        arquivoStorageService.deletePdf(livro.getCaminhoArquivo());
         livroRepository.delete(livro);
     }
 
@@ -58,18 +61,32 @@ public class LivroService {
     public Livro create(LivroCreateDTO dto, MultipartFile arquivo) throws IOException {
         validarArquivo(arquivo);
 
+        String caminhoArquivo = arquivoStorageService.savePdf(arquivo);
+        
         Livro livro = livroMapper.toEntity(dto);
-        livro.setArquivoPdf(arquivo.getBytes());
+        livro.setCaminhoArquivo(caminhoArquivo);
         
         return livroRepository.save(livro);
     }
 
     @Transactional
-    public Livro update(Long id, LivroUpdateDTO dto) throws IOException {
+    public Livro update(Long id, LivroUpdateDTO dto, MultipartFile novoArquivo) throws IOException {
         Livro livro = findById(id);
+
+        if (novoArquivo != null && !novoArquivo.isEmpty()) {
+            validarArquivo(novoArquivo);
+            arquivoStorageService.deletePdf(livro.getCaminhoArquivo());
+            String novoCaminhoArquivo = arquivoStorageService.savePdf(novoArquivo);
+            livro.setCaminhoArquivo(novoCaminhoArquivo);
+        }
 
         livroMapper.updateEntityFromDTO(dto, livro);
         return livroRepository.save(livro);
+    }
+
+    public byte[] getPdf(Long id) {
+        Livro livro = findById(id);
+        return arquivoStorageService.getPdf(livro.getCaminhoArquivo());
     }
 
     private void validarArquivo(MultipartFile arquivo) throws ArquivoException {

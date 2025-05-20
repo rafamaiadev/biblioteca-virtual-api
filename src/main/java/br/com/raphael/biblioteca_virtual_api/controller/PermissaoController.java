@@ -41,7 +41,7 @@ public class PermissaoController {
     }
 
     @PostMapping
-    @PreAuthorize("hasAuthority('CADASTRAR_PERMISSAO')")
+//    @PreAuthorize("hasAuthority('CADASTRAR_PERMISSAO')")
     @Operation(summary = "Cadastra uma nova permissão")
     public ResponseEntity<PermissaoResponseDTO> create(@RequestBody PermissaoCreateDTO permissaoDTO) {
         Permissao permissao = permissaoService.create(permissaoDTO);
@@ -51,7 +51,7 @@ public class PermissaoController {
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasAuthority('EDITAR_PERMISSAO')")
+//    @PreAuthorize("hasAuthority('EDITAR_PERMISSAO')")
     @Operation(summary = "Atualiza uma permissão")
     public ResponseEntity<PermissaoResponseDTO> update(
             @PathVariable Long id,
@@ -61,7 +61,7 @@ public class PermissaoController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAuthority('EXCLUIR_PERMISSAO')")
+//    @PreAuthorize("hasAuthority('EXCLUIR_PERMISSAO')")
     @Operation(summary = "Exclui uma permissão")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         permissaoService.delete(id);

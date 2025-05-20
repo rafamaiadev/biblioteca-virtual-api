@@ -5,7 +5,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Lob;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -36,6 +35,6 @@ public class Livro {
     @Size(max = 255)
     private String categoria;
 
-    @Column(nullable = false)
-    private byte[] arquivoPdf;
+    @Column(name = "caminho_arquivo", nullable = false)
+    private String caminhoArquivo;
 }

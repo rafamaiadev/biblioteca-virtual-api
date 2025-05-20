@@ -64,13 +64,14 @@ public class LivroController {
             .body(livroMapper.toResponseDTO(livro));
     }
 
-    @PutMapping(value = "/{id}")
+    @PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @PreAuthorize("hasAuthority('EDITAR_LIVRO')")
     @Operation(summary = "Atualiza um livro")
     public ResponseEntity<LivroResponseDTO> update(
             @PathVariable Long id,
-            @RequestBody LivroUpdateDTO livroDTO) throws IOException {
-        Livro livro = livroService.update(id, livroDTO);
+            @RequestPart(value = "livroDTO") LivroUpdateDTO livroDTO,
+            @RequestPart(value = "pdf", required = false) MultipartFile pdf) throws IOException {
+        Livro livro = livroService.update(id, livroDTO, pdf);
         return ResponseEntity.ok(livroMapper.toResponseDTO(livro));
     }
 
@@ -78,6 +79,7 @@ public class LivroController {
     @Operation(summary = "Visualiza o PDF do livro")
     public ResponseEntity<byte[]> getPdf(@PathVariable Long id) {
         Livro livro = livroService.findById(id);
+        byte[] pdfBytes = livroService.getPdf(id);
 
         return ResponseEntity.ok()
             .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + livro.getTitulo() + ".pdf\"")
@@ -85,7 +87,7 @@ public class LivroController {
             .header(HttpHeaders.PRAGMA, "no-cache")
             .header(HttpHeaders.EXPIRES, "0")
             .contentType(MediaType.APPLICATION_PDF)
-            .body(livro.getArquivoPdf());
+            .body(pdfBytes);
     }
 
     @DeleteMapping("/{id}")
