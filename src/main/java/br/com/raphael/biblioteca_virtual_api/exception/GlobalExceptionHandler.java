@@ -15,8 +15,10 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
 import br.com.raphael.biblioteca_virtual_api.domain.dto.response.ErrorResponseDTO;
+import io.swagger.v3.oas.annotations.Hidden;
 import jakarta.persistence.EntityNotFoundException;
 
+@Hidden
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 

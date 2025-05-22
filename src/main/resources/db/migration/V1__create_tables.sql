@@ -25,5 +25,14 @@ CREATE TABLE livro (
     titulo VARCHAR(150) NOT NULL,
     autor VARCHAR(100) NOT NULL,
     categoria VARCHAR(255),
-    caminho_arquivo VARCHAR(255) NOT NULL
-); 
+    caminho_arquivo VARCHAR(255) NOT NULL,
+    caminho_capa VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE usuario_livro (
+    usuario_id BIGINT NOT NULL,
+    livro_id BIGINT NOT NULL,
+    PRIMARY KEY (usuario_id, livro_id),
+    FOREIGN KEY (usuario_id) REFERENCES usuario(id),
+    FOREIGN KEY (livro_id) REFERENCES livro(id)
+);  

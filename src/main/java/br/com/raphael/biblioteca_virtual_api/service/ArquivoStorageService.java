@@ -55,4 +55,42 @@ public class ArquivoStorageService {
             throw new ArquivoException("Erro ao excluir o arquivo", e);
         }
     }
+
+    public String saveImagem(MultipartFile imagem) {
+        try {
+            Path diretorio = Paths.get(uploadDir);
+            if (!Files.exists(diretorio)) {
+                Files.createDirectories(diretorio);
+            }
+
+            String nomeOriginal = imagem.getOriginalFilename();
+            String extensao = nomeOriginal.substring(nomeOriginal.lastIndexOf("."));
+            String novoNome = UUID.randomUUID().toString() + extensao;
+
+            Path imagemPath = diretorio.resolve(novoNome);
+            Files.copy(imagem.getInputStream(), imagemPath);
+
+            return imagemPath.toString();
+        } catch (IOException e) {
+            throw new ArquivoException("Erro ao salvar a imagem da capa", e);
+        }
+    }
+
+    public void deleteImagem(String path) {
+        try {
+            Path imagemPath = Paths.get(path);
+            Files.deleteIfExists(imagemPath);
+        } catch (IOException e) {
+            throw new ArquivoException("Erro ao excluir a imagem da capa", e);
+        }
+    }
+
+    public byte[] getImagem(String path) {
+        try {
+            Path imagemPath = Paths.get(path);
+            return Files.readAllBytes(imagemPath);
+        } catch (IOException e) {
+            throw new ArquivoException("Erro ao recuperar a imagem da capa", e);
+        }
+    }
 } 

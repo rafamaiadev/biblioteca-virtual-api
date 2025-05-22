@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import br.com.raphael.biblioteca_virtual_api.domain.dto.request.PermissaoCreateDTO;
@@ -16,7 +17,6 @@ import br.com.raphael.biblioteca_virtual_api.service.PermissaoService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.security.access.prepost.PreAuthorize;
 
 @RestController
 @RequestMapping("/permissoes")
@@ -32,6 +32,7 @@ public class PermissaoController {
     }
 
     @GetMapping
+    @PreAuthorize("hasAuthority('VISUALIZAR_PERMISSAO')")
     @Operation(summary = "Lista todas as permissões")
     public ResponseEntity<List<PermissaoResponseDTO>> findAll() {
         return ResponseEntity.ok(permissaoService.findAll()
@@ -41,7 +42,7 @@ public class PermissaoController {
     }
 
     @PostMapping
-//    @PreAuthorize("hasAuthority('CADASTRAR_PERMISSAO')")
+    @PreAuthorize("hasAuthority('CADASTRAR_PERMISSAO')")
     @Operation(summary = "Cadastra uma nova permissão")
     public ResponseEntity<PermissaoResponseDTO> create(@RequestBody PermissaoCreateDTO permissaoDTO) {
         Permissao permissao = permissaoService.create(permissaoDTO);
@@ -51,7 +52,7 @@ public class PermissaoController {
     }
 
     @PutMapping("/{id}")
-//    @PreAuthorize("hasAuthority('EDITAR_PERMISSAO')")
+    @PreAuthorize("hasAuthority('EDITAR_PERMISSAO')")
     @Operation(summary = "Atualiza uma permissão")
     public ResponseEntity<PermissaoResponseDTO> update(
             @PathVariable Long id,
@@ -61,7 +62,7 @@ public class PermissaoController {
     }
 
     @DeleteMapping("/{id}")
-//    @PreAuthorize("hasAuthority('EXCLUIR_PERMISSAO')")
+    @PreAuthorize("hasAuthority('EXCLUIR_PERMISSAO')")
     @Operation(summary = "Exclui uma permissão")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         permissaoService.delete(id);

@@ -58,19 +58,22 @@ public class LivroService {
     }
 
     @Transactional
-    public Livro create(LivroCreateDTO dto, MultipartFile arquivo) throws IOException {
+    public Livro create(LivroCreateDTO dto, MultipartFile arquivo, MultipartFile capa) throws IOException {
         validarArquivo(arquivo);
+        validarArquivoImagem(capa);
 
         String caminhoArquivo = arquivoStorageService.savePdf(arquivo);
-        
+        String caminhoCapa = arquivoStorageService.saveImagem(capa);
+
         Livro livro = livroMapper.toEntity(dto);
         livro.setCaminhoArquivo(caminhoArquivo);
-        
+        livro.setCaminhoCapa(caminhoCapa);
+
         return livroRepository.save(livro);
     }
 
     @Transactional
-    public Livro update(Long id, LivroUpdateDTO dto, MultipartFile novoArquivo) throws IOException {
+    public Livro update(Long id, LivroUpdateDTO dto, MultipartFile novoArquivo, MultipartFile novaCapa) throws IOException {
         Livro livro = findById(id);
 
         if (novoArquivo != null && !novoArquivo.isEmpty()) {
@@ -80,6 +83,13 @@ public class LivroService {
             livro.setCaminhoArquivo(novoCaminhoArquivo);
         }
 
+        if (novaCapa != null && !novaCapa.isEmpty()) {
+            validarArquivoImagem(novaCapa);
+            arquivoStorageService.deleteImagem(livro.getCaminhoCapa());
+            String novoCaminhoCapa = arquivoStorageService.saveImagem(novaCapa);
+            livro.setCaminhoCapa(novoCaminhoCapa);
+        }
+
         livroMapper.updateEntityFromDTO(dto, livro);
         return livroRepository.save(livro);
     }
@@ -87,6 +97,11 @@ public class LivroService {
     public byte[] getPdf(Long id) {
         Livro livro = findById(id);
         return arquivoStorageService.getPdf(livro.getCaminhoArquivo());
+    }
+
+    public byte[] getCapa(Long id) {
+        Livro livro = findById(id);
+        return arquivoStorageService.getImagem(livro.getCaminhoCapa());
     }
 
     private void validarArquivo(MultipartFile arquivo) throws ArquivoException {
@@ -100,6 +115,19 @@ public class LivroService {
 
         if (arquivo.getSize() > maxFileSize) {
             throw new ArquivoException("O arquivo excede o tamanho máximo permitido de " + (maxFileSize / 1024 / 1024) + "MB");
+        }
+    }
+
+    private void validarArquivoImagem(MultipartFile imagem) throws ArquivoException {
+        if (imagem == null || imagem.isEmpty()) {
+            throw new ArquivoException("A imagem da capa é obrigatória");
+        }
+        String contentType = imagem.getContentType();
+        if (!contentType.equals("image/jpeg") && !contentType.equals("image/png")) {
+            throw new ArquivoException("Apenas imagens JPG ou PNG são permitidas para a capa");
+        }
+        if (imagem.getSize() > maxFileSize) {
+            throw new ArquivoException("A imagem excede o tamanho máximo permitido de " + (maxFileSize / 1024 / 1024) + "MB");
         }
     }
 }

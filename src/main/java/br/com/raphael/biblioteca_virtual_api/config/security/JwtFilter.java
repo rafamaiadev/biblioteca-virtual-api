@@ -19,11 +19,11 @@ import jakarta.servlet.http.HttpServletResponse;
 public class JwtFilter extends OncePerRequestFilter {
 
     private final JwtUtil jwtUtil;
-    private final UsuarioService userDetailsService;
+    private final UsuarioService usuarioService;
 
-    public JwtFilter(JwtUtil jwtUtil, UsuarioService userDetailsService) {
+    public JwtFilter(JwtUtil jwtUtil, UsuarioService usuarioService) {
         this.jwtUtil = jwtUtil;
-        this.userDetailsService = userDetailsService;
+        this.usuarioService = usuarioService;
     }
 
     @Override
@@ -41,7 +41,7 @@ public class JwtFilter extends OncePerRequestFilter {
         }
         
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
+            UserDetails userDetails = this.usuarioService.loadUserByUsername(username);
             
             if (jwtUtil.validateToken(jwt, userDetails)) {
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(

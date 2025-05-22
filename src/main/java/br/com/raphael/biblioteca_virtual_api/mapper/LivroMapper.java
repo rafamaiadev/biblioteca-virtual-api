@@ -13,15 +13,27 @@ import br.com.raphael.biblioteca_virtual_api.domain.model.Livro;
     unmappedSourcePolicy = ReportingPolicy.IGNORE,
     nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE
 )
-public interface LivroMapper {
+public abstract class LivroMapper {
+
+    @Mapping(target = "urlCapa", ignore = true)
+    @Mapping(target = "urlPdf", ignore = true)
+    public abstract LivroResponseDTO toResponseDTO(Livro entity);
+
+    @AfterMapping
+    void afterMapping(Livro entity, @MappingTarget LivroResponseDTO dto) {
+        if (entity.getId() != null) {
+            dto.setUrlCapa("/livros/" + entity.getId() + "/capa");
+            dto.setUrlPdf("/livros/" + entity.getId() + "/pdf");
+        }
+    }
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "caminhoArquivo", ignore = true)
-    Livro toEntity(LivroCreateDTO dto);
+    @Mapping(target = "caminhoCapa", ignore = true)
+    public abstract Livro toEntity(LivroCreateDTO dto);
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "caminhoArquivo", ignore = true)
-    void updateEntityFromDTO(LivroUpdateDTO dto, @MappingTarget Livro entity);
-
-    LivroResponseDTO toResponseDTO(Livro entity);
+    @Mapping(target = "caminhoCapa", ignore = true)
+    public abstract void updateEntityFromDTO(LivroUpdateDTO dto, @MappingTarget Livro entity);
 } 

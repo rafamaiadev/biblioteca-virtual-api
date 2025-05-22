@@ -37,6 +37,7 @@ public class LivroController {
     }
 
     @GetMapping
+    @PreAuthorize("hasAuthority('VISUALIZAR_LIVRO')")
     @Operation(summary = "Lista todos os livros baseado em algum filtro")
     public ResponseEntity<List<LivroResponseDTO>> findAll(LivroFilter filter) {
         return ResponseEntity.ok(livroService.findAll(filter)
@@ -46,6 +47,7 @@ public class LivroController {
     }
 
     @GetMapping("/pageable")
+    @PreAuthorize("hasAuthority('VISUALIZAR_LIVRO')")
     @Operation(summary = "Lista todos os livros de forma paginada baseado em algum filtro")
     public ResponseEntity<Page<LivroResponseDTO>> findAll(LivroFilter filter, Pageable pageable) {
         return ResponseEntity.ok(livroService.findAll(filter, pageable)
@@ -57,8 +59,9 @@ public class LivroController {
     @Operation(summary = "Cadastra um novo livro com arquivo PDF")
     public ResponseEntity<LivroResponseDTO> create(
             @RequestPart(value = "livroDTO") LivroCreateDTO livroDTO,
-            @RequestPart(value = "pdf") MultipartFile pdf) throws IOException {
-        Livro livro = livroService.create(livroDTO, pdf);
+            @RequestPart(value = "pdf") MultipartFile pdf,
+            @RequestPart("capa") MultipartFile capa) throws IOException {
+        Livro livro = livroService.create(livroDTO, pdf, capa);
         return ResponseEntity
             .created(URI.create("/livros/" + livro.getId()))
             .body(livroMapper.toResponseDTO(livro));
@@ -70,12 +73,14 @@ public class LivroController {
     public ResponseEntity<LivroResponseDTO> update(
             @PathVariable Long id,
             @RequestPart(value = "livroDTO") LivroUpdateDTO livroDTO,
-            @RequestPart(value = "pdf", required = false) MultipartFile pdf) throws IOException {
-        Livro livro = livroService.update(id, livroDTO, pdf);
+            @RequestPart(value = "pdf", required = false) MultipartFile pdf,
+            @RequestPart(value =  "capa", required = false) MultipartFile capa) throws IOException {
+        Livro livro = livroService.update(id, livroDTO, pdf, capa);
         return ResponseEntity.ok(livroMapper.toResponseDTO(livro));
     }
 
     @GetMapping("/{id}/pdf")
+    @PreAuthorize("hasAuthority('VISUALIZAR_LIVRO')")
     @Operation(summary = "Visualiza o PDF do livro")
     public ResponseEntity<byte[]> getPdf(@PathVariable Long id) {
         Livro livro = livroService.findById(id);
@@ -88,6 +93,21 @@ public class LivroController {
             .header(HttpHeaders.EXPIRES, "0")
             .contentType(MediaType.APPLICATION_PDF)
             .body(pdfBytes);
+    }
+
+    @GetMapping("/{id}/capa")
+    @Operation(summary = "Visualiza a capa do livro")
+    public ResponseEntity<byte[]> getCapa(@PathVariable Long id) {
+        Livro livro = livroService.findById(id);
+        byte[] imagemBytes = livroService.getCapa(id);
+
+        return ResponseEntity.ok()
+            .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"capa_" + livro.getTitulo() + ".jpg\"")
+            .header(HttpHeaders.CACHE_CONTROL, "no-store, no-cache, must-revalidate, proxy-revalidate")
+            .header(HttpHeaders.PRAGMA, "no-cache")
+            .header(HttpHeaders.EXPIRES, "0")
+            .contentType(MediaType.IMAGE_JPEG)
+            .body(imagemBytes);
     }
 
     @DeleteMapping("/{id}")

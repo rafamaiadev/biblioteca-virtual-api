@@ -45,6 +45,11 @@ public class UsuarioService implements UserDetailsService {
     }
 
     @Transactional
+    public Usuario save(Usuario usuario) {
+        return usuarioRepository.save(usuario);
+    }
+
+    @Transactional
     public Usuario update(Long id, UsuarioUpdateDTO dto) {
         Usuario usuario = findById(id);
         

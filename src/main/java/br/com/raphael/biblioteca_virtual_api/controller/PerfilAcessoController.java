@@ -32,6 +32,7 @@ public class PerfilAcessoController {
     }
 
     @GetMapping
+    @PreAuthorize("hasAuthority('VISUALIZAR_PERFIL')")
     @Operation(summary = "Lista todos os perfis de acesso")
     public ResponseEntity<List<PerfilAcessoResponseDTO>> findAll() {
         return ResponseEntity.ok(perfilAcessoService.findAll()

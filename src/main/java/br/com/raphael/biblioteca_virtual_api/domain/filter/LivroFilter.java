@@ -6,8 +6,8 @@ import lombok.Setter;
 @Getter
 @Setter
 public class LivroFilter {
+    private String search;
     private String titulo;
     private String autor;
-    private String isbn;
     private String categoria;
 } 
