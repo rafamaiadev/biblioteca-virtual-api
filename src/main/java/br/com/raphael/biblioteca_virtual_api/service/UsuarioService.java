@@ -80,7 +80,7 @@ public class UsuarioService implements UserDetailsService {
 
     @Override
     @Transactional(readOnly = true)
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public Usuario loadUserByUsername(String username) throws UsernameNotFoundException {
         return findByUsername(username);
     }
 

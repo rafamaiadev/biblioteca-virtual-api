@@ -75,7 +75,7 @@ public class UsuarioController {
     @Operation(summary = "Cadastra um novo usuário")
     public ResponseEntity<UsuarioResponseDTO> create(@RequestBody UsuarioCreateDTO usuarioDTO) {
         Usuario usuario = usuarioService.save(usuarioDTO);
-        return ResponseEntity
+            return ResponseEntity
             .created(URI.create("/usuarios/" + usuario.getId()))
             .body(usuarioMapper.toResponseDTO(usuario));
     }

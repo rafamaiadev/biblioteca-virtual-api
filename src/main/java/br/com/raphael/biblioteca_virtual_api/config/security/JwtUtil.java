@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
+import br.com.raphael.biblioteca_virtual_api.domain.model.Usuario;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -29,9 +30,14 @@ public class JwtUtil {
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public String generateToken(UserDetails userDetails) {
+    public String generateToken(Usuario usuario) {
         Map<String, Object> claims = new HashMap<>();
-        return createToken(claims, userDetails.getUsername());
+        claims.put("authorities", usuario.getAuthorities()
+                .stream()
+                .map(a -> a.getAuthority().toUpperCase())
+                .toArray(String[]::new));
+        claims.put("usuarioId", usuario.getId());
+        return createToken(claims, usuario.getUsername());
     }
 
     private String createToken(Map<String, Object> claims, String subject) {

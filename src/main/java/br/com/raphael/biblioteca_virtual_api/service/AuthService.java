@@ -1,5 +1,6 @@
 package br.com.raphael.biblioteca_virtual_api.service;
 
+import br.com.raphael.biblioteca_virtual_api.domain.model.Usuario;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -29,8 +30,8 @@ public class AuthService {
                 new UsernamePasswordAuthenticationToken(request.username(), request.password())
             );
 
-            final UserDetails userDetails = usuarioService.loadUserByUsername(request.username());
-            final String token = jwtUtil.generateToken(userDetails);
+            final Usuario user = usuarioService.loadUserByUsername(request.username());
+            final String token = jwtUtil.generateToken(user);
             
             return new AuthResponse(token);
         } catch (BadCredentialsException e) {

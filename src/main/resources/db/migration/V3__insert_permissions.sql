@@ -15,7 +15,9 @@ INSERT INTO permissao (descricao, perfil_acesso_id) VALUES
     ('CADASTRAR_PERMISSAO', 1),
     ('EDITAR_PERMISSAO', 1),
     ('EXCLUIR_PERMISSAO', 1),
-    ('VISUALIZAR_PERMISSAO', 1);
+    ('VISUALIZAR_PERMISSAO', 1),
+    ('VISUALIZAR_PAINEL_USUARIOS', 1),
+    ('VISUALIZAR_PAINEL_LIVROS', 1);
 
 INSERT INTO permissao (descricao, perfil_acesso_id) VALUES
     ('VISUALIZAR_LIVRO', 2),

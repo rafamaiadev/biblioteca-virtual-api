@@ -8,8 +8,12 @@ public record UsuarioCreateDTO(
     
     @NotBlank(message =  "O nome do usuário deve ser informado!")
     String username,
-    
-    @Email(message = "O email do usuário deve ser informado!")
+
+    @NotBlank(message =  "O nome do usuário deve ser informado!")
+    String nome,
+
+    @NotBlank(message =  "O email do usuário deve ser informado!")
+    @Email(message = "O email do usuário deve ser válido!")
     String email,
     
     @NotBlank(message =  "A senha do usuário deve ser informada!")

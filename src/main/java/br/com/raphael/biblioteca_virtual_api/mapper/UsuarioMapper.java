@@ -30,6 +30,6 @@ public interface UsuarioMapper {
     @Mapping(target = "password", ignore = true)
     void updateEntityFromDTO(UsuarioUpdateDTO dto, @MappingTarget Usuario entity);
 
-    @Mapping(target = "perfilAcessoDescricao", source = "perfilAcesso.descricao")
+    @Mapping(target = "perfilAcesso", source = "perfilAcesso.descricao")
     UsuarioResponseDTO toResponseDTO(Usuario entity);
 } 

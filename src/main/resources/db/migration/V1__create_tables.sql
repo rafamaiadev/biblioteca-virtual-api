@@ -13,6 +13,7 @@ CREATE TABLE permissao (
 
 CREATE TABLE usuario (
     id BIGSERIAL PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL,
     username VARCHAR(100) NOT NULL,
     email VARCHAR(255) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,

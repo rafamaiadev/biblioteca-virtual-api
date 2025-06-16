@@ -7,7 +7,9 @@ public record UsuarioUpdateDTO(
     
     @Email
     String email,
-    
+
+    String nome,
+
     Long perfilAcessoId) {
 
 }

@@ -39,9 +39,13 @@ public class Usuario implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "O nome de usuário deve ser informado.")
+    @NotBlank(message = "O username do usuário deve ser informado.")
     @Size(max = 100)
     private String username;
+
+    @NotBlank(message = "O nome do usuário deve ser informado.")
+    @Size(max = 100)
+    private String nome;
 
     @NotBlank(message = "O e-mail deve ser informado.")
     @Email
@@ -56,7 +60,7 @@ public class Usuario implements UserDetails {
     @JoinColumn(name = "perfil_acesso_id", nullable = false)
     private PerfilAcesso perfilAcesso;
     
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(
         name = "usuario_livro",
         joinColumns = @JoinColumn(name = "usuario_id"),
